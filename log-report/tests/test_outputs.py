@@ -1,7 +1,9 @@
+import hashlib
 import json
 from pathlib import Path
 
 REPORT = Path("/app/report.json")
+ACCESS_LOG = Path("/app/access.log")
 
 # Ground truth derived by hand from the fixed input environment/access.log:
 # 6 request lines; distinct IPs {192.168.0.1, 192.168.0.2, 10.0.0.5};
@@ -9,6 +11,10 @@ REPORT = Path("/app/report.json")
 EXPECTED_TOTAL_REQUESTS = 6
 EXPECTED_UNIQUE_IPS = 3
 EXPECTED_TOP_PATH = "/index.html"
+# SHA-256 of the original environment/access.log baked into the image.
+EXPECTED_ACCESS_LOG_SHA256 = (
+    "e83c0cb8dd9c33cbe0954cc038bd0ff90834cf48747e257d931dce5b2408d38e"
+)
 
 
 def _report():
@@ -45,3 +51,9 @@ def test_top_path_value():
     value = _report()["top_path"]
     assert isinstance(value, str)
     assert value == EXPECTED_TOP_PATH
+
+
+def test_access_log_unchanged():
+    """Criterion 6: /app/access.log is byte-for-byte unchanged from the original input."""
+    digest = hashlib.sha256(ACCESS_LOG.read_bytes()).hexdigest()
+    assert digest == EXPECTED_ACCESS_LOG_SHA256

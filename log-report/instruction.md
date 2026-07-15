@@ -7,5 +7,6 @@ Success criteria:
 3. "total_requests" is an integer: the total number of request lines in /app/access.log.
 4. "unique_ips" is an integer: the number of distinct client IP addresses (the first field of each line).
 5. "top_path" is a string: the request path (e.g. "/index.html") that appears in the most requests. The log has a single most-requested path, so no tie-breaking rule is needed.
+6. /app/access.log is byte-for-byte unchanged from the original file provided in the environment.
 
 You have 120 seconds to complete this task. Do not cheat by using online solutions or hints specific to this task.
